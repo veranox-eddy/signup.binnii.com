@@ -1,7 +1,7 @@
-<p>Hi {{ $user->name }},</p>
+<p>Hi {{ $pending->name }},</p>
 
 <p>
-    Your organization <b>{{ $user->organization->name }}</b> is ready on {{ config('app.name') }}.
+    Your organization <b>{{ $pending->organization_name }}</b> is ready to be set up on {{ config('app.name') }}.
     Verify your email to start your 14-day free trial.
 </p>
 

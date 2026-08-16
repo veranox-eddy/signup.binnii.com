@@ -10,6 +10,9 @@
             @if (session('status'))
                 <p class="status-note">{{ session('status') }}</p>
             @endif
+            @if (session('signup_error'))
+                <p class="error-note">{{ session('signup_error') }}</p>
+            @endif
             <form method="POST" action="{{ route('signup.account.store') }}" class="fform">
                 @csrf
                 <label>
@@ -37,7 +40,9 @@
                 <label>
                     <span>Country / region</span>
                     <select name="country_code" required>
-                        <option value="CA" @selected(old('country_code', 'CA') === 'CA')>Canada</option>
+                        @foreach ($countries as $country)
+                            <option value="{{ $country['code'] }}" @selected(old('country_code', 'CA') === $country['code'])>{{ $country['name'] }}</option>
+                        @endforeach
                     </select>
                     <span class="fhint">Sets your market and currency; your organization is bound to it at signup.</span>
                     @error('country_code')<span class="field-error">{{ $message }}</span>@enderror

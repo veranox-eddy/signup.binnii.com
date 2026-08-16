@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\Models\User;
+use App\Models\PendingSignup;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
@@ -17,7 +17,7 @@ class VerifyEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public function __construct(public User $user, public string $plainToken)
+    public function __construct(public PendingSignup $pending, public string $plainToken)
     {
         //
     }
