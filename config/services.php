@@ -14,6 +14,13 @@ return [
     |
     */
 
+    // Outbound push to api.binnii.com's internal tenant-intake endpoint.
+    'signup_intake' => [
+        'url' => rtrim((string) env('SIGNUP_INTAKE_URL', ''), '/'),
+        'secret' => env('SIGNUP_INTAKE_SECRET'),
+        'client' => env('SIGNUP_INTAKE_CLIENT', 'signup-1'),
+    ],
+
     'postmark' => [
         'key' => env('POSTMARK_API_KEY'),
     ],
