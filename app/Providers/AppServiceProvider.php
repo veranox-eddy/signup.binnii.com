@@ -17,18 +17,14 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      *
-     * This repo carries NO migrations at all — app.binnii.com owns every
-     * schema definition, including this host's private SQLite staging
-     * store (app.binnii.com/database/migrations/signup-sqlite). The local
-     * schema arrives as a generated snapshot,
-     * database/schema/signup-schema.sql, which `php artisan migrate` loads
-     * onto a fresh SQLite; regenerate it in the app repo (recipe in the
-     * pending_signups migration header) whenever the staging schema
-     * changes, then rebuild the staging file (its data is 30-day
-     * transient).
+     * The SQLite staging schema is this repo's own (database/migrations/
+     * sqlite, running on the default `signup` connection) so the staging
+     * store keeps normal incremental migrations. MySQL schema stays owned
+     * by app.binnii.com — this repo cannot even connect to MySQL with
+     * write permissions.
      */
     public function boot(): void
     {
-        //
+        $this->loadMigrationsFrom(database_path('migrations/sqlite'));
     }
 }
