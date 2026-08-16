@@ -1,0 +1,10 @@
+{
+    "uuid": "6f1c0000-0000-4000-8000-000000000001",
+    "name": "Alex Chen",
+    "email": "alex@cedarway.ca",
+    "password_hash": "$2y$04$YGKK1VdguN384a7O1wSxcuLXb6vmDn0WT8wkZQrav8VYNmouU9SQC",
+    "country_code": "CA",
+    "organization_name": "Cedar Way",
+    "billing_timezone": "America/Vancouver",
+    "verified_at": "2026-08-16T03:12:00Z"
+}

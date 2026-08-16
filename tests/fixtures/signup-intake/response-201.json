@@ -1,0 +1,6 @@
+{
+    "organization_id": 567,
+    "user_id": 1234,
+    "handoff_token": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+    "handoff_expires_at": "2026-08-16T03:23:00Z"
+}

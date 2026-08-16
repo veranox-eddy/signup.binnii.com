@@ -1,0 +1,6 @@
+{
+    "error": "validation_failed",
+    "fields": {
+        "billing_timezone": "not allowed"
+    }
+}
