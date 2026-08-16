@@ -17,19 +17,13 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      *
-     * Schema owner is the app.binnii.com repo: this project has NO
-     * migrations of its own and deployment MUST NOT run migrate. The test
-     * suite builds its throwaway sqlite schema from
-     * database/schema/sqlite-schema.sql — a dump of the console repo's
-     * migrations. Regenerate it there when the schema changes:
-     *
-     *   cd ../app.binnii.com
-     *   DB_CONNECTION=sqlite DB_DATABASE=/tmp/schema.sqlite php artisan migrate --force
-     *   DB_CONNECTION=sqlite DB_DATABASE=/tmp/schema.sqlite php artisan schema:dump
-     *   mv database/schema/sqlite-schema.sql ../signup.binnii.com/database/schema/
+     * The SQLite staging schema is this repo's own (database/migrations/
+     * sqlite, running on the default `signup` connection). MySQL schema
+     * stays owned by app.binnii.com — this repo cannot even connect to
+     * MySQL with write permissions.
      */
     public function boot(): void
     {
-        //
+        $this->loadMigrationsFrom(database_path('migrations/sqlite'));
     }
 }
