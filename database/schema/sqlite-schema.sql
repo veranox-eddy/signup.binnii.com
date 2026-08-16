@@ -1146,6 +1146,7 @@ CREATE TABLE IF NOT EXISTS "markets"(
   "country_code" varchar not null,
   "currency" varchar not null default 'USD',
   "annual_discount_rate" numeric not null default '0.8',
+  "tax_name" varchar not null default '',
   "tax_rate" numeric not null default '0',
   "tax_confirmed_at" datetime,
   "tax_notice" varchar,

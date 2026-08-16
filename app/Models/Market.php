@@ -12,8 +12,8 @@ class Market extends Model
 {
     protected $fillable = [
         'code', 'name', 'country_code', 'currency', 'annual_discount_rate',
-        'tax_rate', 'tax_confirmed_at', 'tax_notice', 'is_active', 'is_fallback',
-        'source', 'contract_version',
+        'tax_name', 'tax_rate', 'tax_confirmed_at', 'tax_notice', 'is_active',
+        'is_fallback', 'source', 'contract_version',
     ];
 
     protected function casts(): array
