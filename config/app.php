@@ -58,6 +58,9 @@ return [
     // login handoff redirect.
     'console_url' => env('APP_CONSOLE_URL', 'https://app.binnii.com'),
 
+    // The static marketing site — target of the brand banner / Help links.
+    'website_url' => env('APP_WEBSITE_URL', 'https://binnii.com'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

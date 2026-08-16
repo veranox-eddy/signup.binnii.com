@@ -49,7 +49,7 @@
 </head>
 <body>
     <nav class="topnav">
-        <a href="/Home.dc.html" class="brand"><img src="/brand/binnii-logo.svg" alt="Binnii" style="width:132px;height:auto;display:block"></a>
+        <a href="{{ config('app.website_url') }}" class="brand"><img src="/brand/binnii-logo.svg" alt="Binnii" style="width:132px;height:auto;display:block"></a>
         <span class="hint">Already have an account?</span>
         <a href="{{ config('app.console_url') }}/login" class="login">Log in</a>
     </nav>
@@ -59,7 +59,7 @@
     <footer class="sitefooter">
         <div class="inner">
             <img src="/brand/binnii-logo-reverse.svg" alt="Binnii" style="width:110px;height:auto">
-            <a href="/FAQ.dc.html">Help</a>
+            <a href="{{ config('app.website_url') }}/FAQ.dc.html">Help</a>
             <span>Terms</span><span>Privacy</span><span>© Binnii by Haody</span>
         </div>
     </footer>
