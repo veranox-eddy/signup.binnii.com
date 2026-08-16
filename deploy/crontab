@@ -1,0 +1,3 @@
+# signup.binnii.com host — run as www-data
+*/5 * * * * cd /var/www/signup.binnii.com && php artisan signup:pull-markets >> /dev/null 2>&1
+10 4 * * *  cd /var/www/signup.binnii.com && php artisan signup:purge        >> /dev/null 2>&1

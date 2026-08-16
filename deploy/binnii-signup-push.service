@@ -1,0 +1,16 @@
+[Unit]
+Description=Binnii signup push worker
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/signup.binnii.com
+ExecStart=/usr/bin/php artisan signup:push --loop-seconds=10
+Restart=always
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
