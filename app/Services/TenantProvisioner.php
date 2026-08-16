@@ -43,10 +43,6 @@ class TenantProvisioner
                 'market_id' => $resolved->market->id,
                 // P-F48: trialing organizations stay Active.
                 'lifecycle_status' => OrganizationLifecycleStatus::Active,
-                // Transitional raw value: the onboarding_status column is
-                // being removed (spec v2 dropped the F-42 gate); this write
-                // disappears together with the column.
-                'onboarding_status' => 'pending_first_center',
                 'billing_timezone' => $organization['billing_timezone'],
                 'is_test_account' => false,
             ]);

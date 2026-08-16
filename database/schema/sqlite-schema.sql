@@ -1194,7 +1194,6 @@ CREATE TABLE IF NOT EXISTS "organizations"(
   "status" tinyint(1) not null default('1'),
   "market_id" integer,
   "lifecycle_status" varchar check("lifecycle_status" in('active', 'payment_issue', 'grace_period', 'read_only', 'suspended', 'unsubscribed')) not null default 'active',
-  "onboarding_status" varchar check("onboarding_status" in('pending_first_center', 'complete')) not null default 'complete',
   "billing_timezone" varchar not null default 'America/Vancouver',
   "is_test_account" tinyint(1) not null default '0',
   foreign key("market_id") references "markets"("id")

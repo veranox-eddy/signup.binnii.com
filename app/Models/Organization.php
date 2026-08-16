@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Organization extends Model
 {
     protected $fillable = [
-        'name', 'status', 'market_id', 'lifecycle_status', 'onboarding_status',
+        'name', 'status', 'market_id', 'lifecycle_status',
         'billing_timezone', 'is_test_account',
     ];
 

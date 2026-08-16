@@ -109,7 +109,6 @@ class SignupTest extends TestCase
         $this->completeSignup()->assertRedirect('/signup/check-email');
 
         $organization = Organization::where('name', 'Sunrise Childcare Inc.')->sole();
-        $this->assertSame('pending_first_center', $organization->getRawOriginal('onboarding_status'));
         $this->assertSame('active', $organization->lifecycle_status->value);
         $this->assertSame('CA', $organization->market->code);
 
