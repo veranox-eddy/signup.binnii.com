@@ -34,7 +34,8 @@
         .fform input,.fform select{font:inherit;font-size:13.5px;color:#1F2430;border:1px solid #CFD0DC;border-radius:5px;padding:9px 11px;background:#fff}
         .fform input:focus,.fform select:focus{border-color:#5E609E;outline:2px solid #EEEEF2}
         .fhint{font-size:11.5px;line-height:1.5;color:#6B7280}
-        .field-error{font-size:12px;color:#9D1500}
+        /* Outranks .fform label>span, which otherwise recolors the error grey. */
+        .fform label>span.field-error{font-size:12px;font-weight:500;color:#9D1500}
         .status-note{background:#EEEEF2;border-radius:6px;padding:10px 12px;font-size:13px;color:#3E4453;margin:0 0 16px}
         .error-note{background:#FBEDEA;border-radius:6px;padding:10px 12px;font-size:13px;color:#9D1500;margin:0 0 16px}
         .btn-primary{font:inherit;font-size:14px;font-weight:600;color:#fff;background:#5E609E;border:0;border-radius:5px;padding:11px 16px;cursor:pointer}
