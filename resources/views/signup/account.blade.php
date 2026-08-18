@@ -34,7 +34,8 @@
                 </label>
                 <label>
                     <span>Password</span>
-                    <input type="password" name="password" placeholder="At least 12 characters" required>
+                    <input type="password" name="password" placeholder="At least 12 characters" minlength="12" required>
+                    <span class="fhint">At least 12 characters, including at least one letter and one number.</span>
                     @error('password')<span class="field-error">{{ $message }}</span>@enderror
                 </label>
                 <label>

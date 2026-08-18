@@ -15,6 +15,10 @@ use Illuminate\Support\Str;
  * Soft-deleted accounts count as taken (conservative). A connection
  * failure is NOT swallowed: the caller must refuse the registration, never
  * skip the check.
+ *
+ * Only BLOCKING_STATUSES count locally — a `draft` left behind by someone
+ * who abandoned step 2 must NOT lock that email out, otherwise the same
+ * person can never restart their own registration.
  */
 class EmailAvailability
 {
@@ -29,6 +33,6 @@ class EmailAvailability
             ->get()
             ->isNotEmpty();
 
-        return $taken || PendingSignup::active()->where('email', $email)->exists();
+        return $taken || PendingSignup::blocking()->where('email', $email)->exists();
     }
 }

@@ -55,7 +55,11 @@ class SignupController extends Controller
             ]);
         }
 
-        $pending = PendingSignup::create([
+        // An abandoned step-1 draft for this email is overwritten, not
+        // refused: the partial unique index allows exactly one active row
+        // per address, and the person retrying IS the owner of that draft.
+        // A fresh uuid keeps every attempt its own push Idempotency-Key.
+        $attributes = [
             'uuid' => (string) Str::uuid(),
             'name' => $validated['name'],
             'email' => $email,
@@ -66,7 +70,21 @@ class SignupController extends Controller
             'status' => PendingSignup::STATUS_DRAFT,
             'request_ip' => $request->ip(),
             'user_agent' => Str::limit((string) $request->userAgent(), 250),
-        ]);
+            // Step 2 has not run yet — clear anything the previous attempt left.
+            'organization_name' => null,
+            'billing_timezone' => null,
+            'failure_reason' => null,
+        ];
+
+        $pending = PendingSignup::where('email', $email)
+            ->where('status', PendingSignup::STATUS_DRAFT)
+            ->first();
+
+        if ($pending) {
+            $pending->update($attributes);
+        } else {
+            $pending = PendingSignup::create($attributes);
+        }
 
         $request->session()->put('signup.uuid', $pending->uuid);
 

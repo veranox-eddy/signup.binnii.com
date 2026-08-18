@@ -35,6 +35,21 @@ class PendingSignup extends Model
         self::STATUS_PUSHING,
     ];
 
+    /**
+     * Statuses that make an email unavailable to a NEW registration.
+     * `draft` is deliberately absent: an abandoned step-1 row must never
+     * lock its own owner out of retrying — storeAccount() overwrites the
+     * draft instead, and signup:purge sweeps the leftovers.
+     */
+    public const array BLOCKING_STATUSES = [
+        self::STATUS_PENDING_VERIFICATION,
+        self::STATUS_VERIFIED,
+        self::STATUS_PUSHING,
+    ];
+
+    /** A draft older than this is abandoned; purge deletes it. */
+    public const int DRAFT_TTL_HOURS = 24;
+
     public const string FAILURE_EMAIL_TAKEN = 'email_taken';
 
     public const string FAILURE_MARKET_UNAVAILABLE = 'market_unavailable';
@@ -65,6 +80,12 @@ class PendingSignup extends Model
     public function scopeActive(Builder $query): Builder
     {
         return $query->whereIn('status', self::ACTIVE_STATUSES);
+    }
+
+    /** Rows that must refuse a fresh registration for the same email. */
+    public function scopeBlocking(Builder $query): Builder
+    {
+        return $query->whereIn('status', self::BLOCKING_STATUSES);
     }
 
     /** Rows the push worker should deliver this round. */

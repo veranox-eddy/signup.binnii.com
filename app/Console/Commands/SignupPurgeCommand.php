@@ -15,6 +15,17 @@ class SignupPurgeCommand extends Command
 
     public function handle(): int
     {
+        // Step-1 drafts that never reached step 2. Deleted outright: they
+        // hold a password hash but no confirmed intent, and while they live
+        // they occupy the one active-row-per-email slot.
+        $drafts = PendingSignup::where('status', PendingSignup::STATUS_DRAFT)
+            ->where('created_at', '<', now()->subHours(PendingSignup::DRAFT_TTL_HOURS))
+            ->delete();
+
+        if ($drafts > 0) {
+            $this->info("{$drafts} abandoned draft(s) removed.");
+        }
+
         // Delivered rows are done after 30 days.
         PendingSignup::where('status', PendingSignup::STATUS_SYNCED)
             ->where('synced_at', '<', now()->subDays(30))

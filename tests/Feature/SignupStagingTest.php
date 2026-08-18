@@ -88,6 +88,45 @@ class SignupStagingTest extends TestCase
         $this->assertSame(1, PendingSignup::count());
     }
 
+    public function test_an_abandoned_draft_is_overwritten_rather_than_blocking_its_own_owner(): void
+    {
+        PendingSignup::create([
+            'uuid' => 'b0000000-0000-0000-0000-000000000003',
+            'name' => 'Half Finished', 'email' => 'alex@gmail.com',
+            'country_code' => 'CA', 'status' => PendingSignup::STATUS_DRAFT,
+        ]);
+
+        $this->postStepOne(['name' => 'Alex Retry'])->assertRedirect('/signup/organization');
+
+        // Still exactly one row — reused, not duplicated — and refreshed.
+        $pending = PendingSignup::where('email', 'alex@gmail.com')->sole();
+        $this->assertSame('Alex Retry', $pending->name);
+        $this->assertSame(PendingSignup::STATUS_DRAFT, $pending->status);
+        $this->assertNotSame('b0000000-0000-0000-0000-000000000003', $pending->uuid);
+        $this->assertSame($pending->uuid, session('signup.uuid'));
+    }
+
+    public function test_purge_deletes_drafts_abandoned_for_longer_than_the_ttl(): void
+    {
+        $stale = PendingSignup::create([
+            'uuid' => 'b0000000-0000-0000-0000-000000000004',
+            'name' => 'Gone', 'email' => 'gone@gmail.com',
+            'country_code' => 'CA', 'status' => PendingSignup::STATUS_DRAFT,
+        ]);
+        $stale->forceFill(['created_at' => now()->subHours(PendingSignup::DRAFT_TTL_HOURS + 1)])->save();
+
+        PendingSignup::create([
+            'uuid' => 'b0000000-0000-0000-0000-000000000005',
+            'name' => 'Still Typing', 'email' => 'fresh@gmail.com',
+            'country_code' => 'CA', 'status' => PendingSignup::STATUS_DRAFT,
+        ]);
+
+        $this->artisan('signup:purge')->assertSuccessful();
+
+        $this->assertNull(PendingSignup::find($stale->id));
+        $this->assertSame(1, PendingSignup::where('status', PendingSignup::STATUS_DRAFT)->count());
+    }
+
     public function test_a_failed_old_row_never_blocks_a_fresh_registration(): void
     {
         PendingSignup::create([
