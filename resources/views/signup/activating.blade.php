@@ -13,7 +13,7 @@
             <meta http-equiv="refresh" content="3">
             <h1 style="font-size:22px;margin:0 0 14px">Activating your account&hellip;</h1>
             <p style="font-size:13.5px;line-height:1.65;color:#3E4453;margin:0 0 12px">
-                This usually takes a few seconds.
+                This usually takes 1 minute. Please stay on this page. 
             </p>
             @if ($stalled)
                 <p class="status-note">Still working on it — we'll email you when it's ready.</p>
