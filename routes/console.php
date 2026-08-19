@@ -24,14 +24,25 @@ Artisan::command('inspire', function () {
 | concurrently — pushable() only picks up `verified` rows and flips them to
 | `pushing` before the HTTP call, and the api intake is idempotent on uuid.
 |
+| appendOutputTo() is deliberate on all three: when SIGNUP_INTAKE_URL /
+| SIGNUP_INTAKE_SECRET are missing, signup:push errors and exits before it
+| picks anything up, so no last_push_error is ever written — combined with
+| runInBackground() that "refusing to run" message would be invisible.
+| storage/logs/ is already www-data-writable; no extra permissions needed.
+|
 */
 
 // --once, not the default daemon loop: the scheduler owns the cadence.
 Schedule::command('signup:push --once')
     ->everyMinute()
-    ->runInBackground();
+    ->runInBackground()
+    ->appendOutputTo(storage_path('logs/signup-schedule.log'));
 
 // The mirror only warns once it is 24h stale, so hourly has plenty of slack.
-Schedule::command('signup:pull-markets')->hourly();
+Schedule::command('signup:pull-markets')
+    ->hourly()
+    ->appendOutputTo(storage_path('logs/signup-schedule.log'));
 
-Schedule::command('signup:purge')->dailyAt('04:10');
+Schedule::command('signup:purge')
+    ->dailyAt('04:10')
+    ->appendOutputTo(storage_path('logs/signup-schedule.log'));

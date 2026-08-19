@@ -1,3 +1,23 @@
-# signup.binnii.com host — run as www-data
-*/5 * * * * cd /var/www/signup.binnii.com && php artisan signup:pull-markets >> /dev/null 2>&1
-10 4 * * *  cd /var/www/signup.binnii.com && php artisan signup:purge        >> /dev/null 2>&1
+# /etc/cron.d/binnii-signup
+#
+# signup.binnii.com 的全部排程只靠這一行。cadence 定義在 routes/console.php：
+#   signup:push --once   每分鐘   — 沒跑 = 註冊永遠卡在 activating 頁
+#   signup:pull-markets  每小時   — 沒跑 = 國家下拉退回只剩 Canada
+#   signup:purge         04:10   — 沒跑 = 過期 draft / handoff token 一直累積
+#
+# 這是 /etc/cron.d/ 格式，帶 user 欄位；plain `crontab -e` 的格式沒有這欄，
+# 兩者不能混用。
+#
+# 規則：
+#   1. 必須跑 www-data（與 php-fpm 同一個 user）。SQLite 是 WAL 模式，用 ubuntu/root
+#      跑會建出錯誤擁有者的 -wal / -shm，之後 php-fpm 寫不進去。
+#   2. 路徑是 /var/www/html/signup.binnii.com（有 /html）。
+#   3. 不要 >> /dev/null 2>&1。路徑一錯 cd 就失敗、&& 短路，錯誤被吞掉，
+#      排程會靜悄悄從沒執行過——這個坑已經踩過一次。
+#   4. HOME 要可寫，否則 artisan 底下的 psysh 會噴 "Writing to directory ... is not allowed"。
+
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+HOME=/tmp
+
+* * * * * www-data cd /var/www/html/signup.binnii.com && php artisan schedule:run >> /var/log/binnii-signup.log 2>&1
